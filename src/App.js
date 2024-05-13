@@ -1,8 +1,8 @@
-import logo from './logo.svg';
 import './App.css';
 import Orologio from "./components/orologio";
 import OrologioZorio from "./components/orologioZorio";
 import Galleria from './components/galleria';
+import Login from './components/login';
 
 function App() {
   return (
@@ -10,6 +10,7 @@ function App() {
       <Orologio/>
       <OrologioZorio />
       <Galleria/>
+      <Login />
     </div>
   );
 }

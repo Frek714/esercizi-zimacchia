@@ -1,39 +1,71 @@
-import React, { useEffect, useState } from 'react'
-import {fetchGallery} from '../api/fetchGallery.js'
+import React, { useEffect, useState, Fragment } from "react";
+import { fetchGallery } from "../api/fetchGallery.js";
 
 function Galleria() {
+  const [gallery, setGallery] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [image, setImage] = useState();
 
-    const [gallery, setGallery] = useState([])
-
-    // ogni volta che refreshi aggiunge nuovamente i 10 elementi
-    useEffect(() => {
-        getPhotos()
-    }, [])
-
-    const getPhotos = async () => {
-        try {
-            const photosCollections = await fetchGallery()
-            // qua vedi sempre e solo i 10 elementi
-            console.log('lista foto', photosCollections);
-            for (let i = 0; i < photosCollections.length; i++) {
-                const photo = photosCollections[i];
-                gallery.push(photo)
-            }
-            // qua si aggiungono 10 elementi ogni volta che refreshi
-            console.log('gallery', gallery);
-            setGallery(gallery)
-        } catch (error) {
-            console.log('Errore');
-        }
+  useEffect(() => {
+    async function getPhotos() {
+      try {
+        const photosCollections = await fetchGallery();
+        setGallery(photosCollections);
+      } catch (error) {
+        console.log("Errore");
+      }
     }
-    
+    if (gallery.length === 0) getPhotos();
+  });
+
+  const handleClick = (image) => {
+    setShowModal(!showModal);
+    setImage(image);
+  };
 
   return (
-    <>
-        <h2>Galleria Random</h2>
+    <Fragment>
+      {/* {console.log(gallery)} */}
+      <h2>Galleria Random</h2>
 
-    </>
-  )
+      <div className="spazio">
+        {gallery.map((ph, index) => {
+          if (index % 3 === 0 || index === 0) {
+            return (
+              <div key={index} className="galleria">
+                {gallery
+                  .slice(index - (index % 3), index - (index % 3) + 3)
+                  .map((photo, indexPh) => {
+                    return (
+                      <img
+                        key={indexPh}
+                        src={photo.urls.thumb}
+                        className="immagine"
+                        alt="ciao"
+                        onClick={() => handleClick(photo.urls.thumb)}
+                      />
+                    );
+                  })}
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+
+      {/* modale */}
+      {showModal && (
+        <div className="modal">
+          <span className="close" onClick={() => setShowModal(false)}>
+              X
+            </span>
+          <div className="modal-content">
+            <img className="immagine-modale" alt="immagine" src={image} />
+          </div>
+        </div>
+      )}
+    </Fragment>
+  );
 }
 
-export default Galleria
+export default Galleria;
