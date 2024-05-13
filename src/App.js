@@ -5,6 +5,7 @@ import Galleria from './components/galleria';
 import Ecommerce from './components/wrapper';
 import Wrapper from './components/wrapper';
 import { Users } from './components/Users';
+import { ToDoList } from './components/ToDoList';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Galleria/> */}
       {/* <Wrapper /> */}
       <Users/>
+      <ToDoList/>
     </div>
   );
 }
